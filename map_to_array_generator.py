@@ -55,7 +55,7 @@ colors = np.array(
 results = {}
 for region in regions:
 
-    mean_color = compute_mean_color(img, region[0], region[1], 5, region_size)
+    mean_color = compute_mean_color(img, region[0], region[1], region_size, region_size)
     closest_color = find_closest_color(mean_color, colors)
     results[region] = closest_color
 
@@ -85,7 +85,9 @@ for region, color in sorted_results.items():
     result_array[row, col] = letter
 
 # Print the 2D array
-
+print("{")
 for row in result_array:
-
-    print(" ".join(row))
+    print("{'")
+    print("', '".join(row))
+    print("'},")
+print("}")
