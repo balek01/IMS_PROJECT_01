@@ -1,20 +1,14 @@
 from PIL import Image
 import numpy as np
 from collections import OrderedDict
-from scipy.stats import mode
 
 
-def compute_mode_color(image, start_x, start_y, width, height, colors):
+# Function to compute the mean color value of a given image region
+def compute_mean_color(image, start_x, start_y, width, height):
     region = image.crop((start_x, start_y, start_x + width, start_y + height))
     pixels = np.array(region)
-    
-    # Reshape the array to a 2D array where each row is a pixel
-    pixels_reshaped = pixels.reshape(-1, pixels.shape[-1])
-
-    # Calculate the mode color index in the predefined colors array
-    mode_index, _ = mode(np.apply_along_axis(lambda x: np.argmin(np.linalg.norm(x - colors, axis=1)), 1, pixels_reshaped), axis=0)
-    
-    return colors[mode_index[0]]
+    mean_color = np.mean(pixels, axis=(0, 1))[:3]
+    return mean_color.astype(int) 
 
 
 # Function to find the closest color from a list
