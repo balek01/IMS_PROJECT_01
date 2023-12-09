@@ -4,7 +4,7 @@
  *
  * @brief Project: IMS CA in ecology
  *
- * @author xbalek02 Miroslav Bálek
+ * @authors xbalek02 Miroslav Bálek, xdobes22 Kristián Dobeš
  *
  *
  *
@@ -13,26 +13,97 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <math.h>
+#include <time.h>
 #include "map.h"
 #include "cell.h"
 #include "utils.h"
-#include "main.h"
 
 int main(int argc, char *argv[])
 {
-
+    int numberOfMonthsSimluated = 12;
+    srand((unsigned int)time(NULL));
     Cell *CellMap = initCellMap(map);
 
-    setRoadCityDistance(CellMap);
-    setNeighbourDeforestDensity(CellMap);
-    // setProbabiltyOfDeforestation(CellMap);
+    for (int i = 0; i < numberOfMonthsSimluated; i++)
+    {
+        setDistances(CellMap);
+        setNeighbourDeforestDensity(CellMap);
+        setProbabiltyOfDeforestationAndUpdateCell(CellMap);
+        fprintf(stderr, "%d\n", i + 1);
+        fflush(stderr);
+    }
 
-    printf("done \n");
+    printMap(CellMap);
 
     free(CellMap);
     return 0;
 }
+void printMap(Cell *CellMap)
+{
+    Cell *cell;
+    for (int row = 0; row < ROWS; row++)
+    {
+        for (int col = 0; col < COLS; col++)
+        {
+            cell = &CellMap[row * COLS + col];
+            switch (cell->type)
+            {
+            case FOREST:
+                printf("F");
+                break;
+            case LAND:
+                printf("L");
+                break;
+            case CITY:
+                printf("C");
+                break;
+            case ROAD:
+                printf("R");
+                break;
+            case DEFORESTED:
+                printf("D");
+                break;
+            default:
+                printf("unknown cell type: %d\n", cell->type);
+                break;
+            }
+        }
+    }
+}
+void setProbabiltyOfDeforestationAndUpdateCell(Cell *CellMap)
+{
+    Cell *cell;
+    for (int row = 0; row < ROWS; row++)
+    {
+        // printf("\n");
+        for (int col = 0; col < COLS; col++)
+        {
+            if (CellMap[row * COLS + col].type == FOREST)
+            {
 
+                cell = &CellMap[row * COLS + col];
+
+                double exponent = -(0 - 2.2 - 1.642 * cell->city_distance * 0.12165 - 5.067 * cell->road_distance * 0.12165 - 1.983 * cell->forest_boundary_distance * 0.12165 + cell->density * 0.12165 - 0.125);
+                double denominator = 1.0 + exp(exponent);
+                double result = 1.0 / denominator;
+                cell->p_deforest = result;
+
+                double randomNum = randomNumber();
+                // printf("%.2f \n", randomNum);
+                if (randomNum <= cell->p_deforest)
+                {
+                    // printf("%.2f ", cell->p_deforest);
+                    cell->type = DEFORESTED;
+                }
+            }
+        }
+    }
+}
+double randomNumber()
+{
+    int randomInt = rand() % 1000001;
+    return (double)randomInt / 1000000.0;
+}
 void setNeighbourDeforestDensity(Cell *CellMap)
 {
     int count = 0;
@@ -40,6 +111,7 @@ void setNeighbourDeforestDensity(Cell *CellMap)
     // Define the relative positions of neighbors (assuming 8-connected neighbors)
     int dx[] = {-1, -1, -1, 0, 0, 1, 1, 1};
     int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
+    double result;
 
     for (int row = 0; row < ROWS; row++)
     {
@@ -66,12 +138,14 @@ void setNeighbourDeforestDensity(Cell *CellMap)
                         }
                     }
                 }
-                CellMap[row * COLS + col].density = count;
+                result = 1 + (count / 8.0);
+                CellMap[row * COLS + col].density = result;
             }
         }
     }
 }
-void setRoadCityDistance(Cell *CellMap)
+
+void setDistances(Cell *CellMap)
 {
     Cell *cell;
     for (int i = 0; i < ROWS; i++)
@@ -117,9 +191,8 @@ void computeCellsDistance(Cell *CellMap, Cell *cell, int x, int y)
                 }
                 setForestBoundary(cell, computed_distance);
             }
-            else if (CellMap[k * COLS + l].type == LAND)
+            else if (CellMap[k * COLS + l].type == LAND || CellMap[k * COLS + l].type == DEFORESTED)
             {
-
                 setForestBoundary(cell, computed_distance);
             }
         }

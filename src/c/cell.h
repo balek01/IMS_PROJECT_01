@@ -1,3 +1,15 @@
+/**
+ *
+ * @file main.c
+ *
+ * @brief Project: IMS CA in ecology
+ *
+ * @authors xbalek02 Miroslav Bálek, xdobes22 Kristián Dobeš
+ *
+ *
+ *
+ */
+
 #ifndef _CELL_H
 #define _CELL_H
 
@@ -7,6 +19,7 @@ enum CellType
     LAND = 1,
     CITY = 2,
     ROAD = 3,
+    DEFORESTED = 4,
 };
 
 typedef struct
@@ -22,8 +35,9 @@ typedef struct
 
 Cell *initCellMap();
 void computeCellsDistance(Cell *CellMap, Cell *cell, int i, int j);
-void setRoadCityDistance(Cell *CellMap);
+void setDistances(Cell *CellMap);
 void setForestBoundary(Cell *cell, double computed_distance);
 void setNeighbourDeforestDensity(Cell *CellMap);
+void setProbabiltyOfDeforestationAndUpdateCell(Cell *CellMap);
 
 #endif

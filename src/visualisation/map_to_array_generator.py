@@ -26,7 +26,7 @@ def find_closest_color(target_color, color_list):
 
 
 # Sample image file path
-image_path = "hradec.png"
+image_path = "mlada_boleslav.png"
 region_size =5
 # Read the image
 img = Image.open(image_path)
@@ -45,6 +45,7 @@ colors = np.array(
         [226, 213, 183],
         # land
         [241, 240, 229],
+        [255, 255, 255],
         [154, 191, 220],
         # forest
         [207, 229, 179],
@@ -87,7 +88,7 @@ for region, color in sorted_results.items():
 # Print the 2D array
 print("{")
 for row in result_array:
-    print("{'")
-    print("', '".join(row))
-    print("'},")
+    print("{")
+    print(", ".join(f"'{value}'" for value in row))
+    print("},")
 print("}")

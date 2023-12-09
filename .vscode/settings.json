@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "stdarg.h": "c",
+        "stdio.h": "c",
+        "stdlib.h": "c",
+        "main.h": "c",
+        "utils.h": "c",
+        "cell.h": "c"
+    }
+}
