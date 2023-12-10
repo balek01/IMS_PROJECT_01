@@ -17,4 +17,5 @@
 
 double randomNumber();
 void printMap(Cell *CellMap);
+int parseArgs(int argc, char *const argv[]);
 #endif

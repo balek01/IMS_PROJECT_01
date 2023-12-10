@@ -14,13 +14,14 @@
 #include <stdbool.h>
 #include <math.h>
 #include <time.h>
+#include <string.h>
 #include "map.h"
 #include "cell.h"
 #include "utils.h"
 
-int main(int argc, char *argv[])
+int main(int argc, char *const argv[])
 {
-    int numberOfMonthsSimluated = 12;
+    int numberOfMonthsSimluated = parseArgs(argc, argv);
     srand((unsigned int)time(NULL));
     Cell *CellMap = initCellMap(map);
 
@@ -37,6 +38,30 @@ int main(int argc, char *argv[])
 
     free(CellMap);
     return 0;
+}
+int parseArgs(int argc, char *const argv[])
+{
+
+    if (argc < 3)
+    {
+        fprintf(stderr, "Usage: %s -t <months>\n", argv[0]);
+        exit(1);
+    }
+
+    if (strcmp(argv[1], "-t") != 0)
+    {
+        fprintf(stderr, "Usage: %s -t <months>\n", argv[0]);
+        exit(1);
+    }
+
+    int t_value = atoi(argv[2]);
+
+    if (t_value <= 0)
+    {
+        fprintf(stderr, "Invalid value for -t. Please enter an integer greater than 0.\n");
+        exit(1);
+    }
+    return t_value;
 }
 void printMap(Cell *CellMap)
 {
