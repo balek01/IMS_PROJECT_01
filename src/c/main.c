@@ -108,7 +108,7 @@ void setProbabiltyOfDeforestationAndUpdateCell(Cell *CellMap)
 
                 cell = &CellMap[row * COLS + col];
 
-                double exponent = -(0 - 2.2 - 1.642 * cell->city_distance * 0.12165 - 5.067 * cell->road_distance * 0.12165 - 1.983 * cell->forest_boundary_distance * 0.12165 + cell->density * 0.12165 - 0.125);
+                double exponent = -(cell->density * CELL_TO_KM - BALANCING_CONSTANT - C_DIST_COFICIENT * cell->city_distance * CELL_TO_KM - R_DIST_COFICIENT * cell->road_distance * CELL_TO_KM - FB_DIST_COFICIENT * cell->forest_boundary_distance * CELL_TO_KM - DEM);
                 double denominator = 1.0 + exp(exponent);
                 double result = 1.0 / denominator;
                 cell->p_deforest = result;

@@ -13,6 +13,13 @@
 #ifndef _CELL_H
 #define _CELL_H
 
+const double R_DIST_COFICIENT = 5.067;
+const double C_DIST_COFICIENT = 1.642;
+const double FB_DIST_COFICIENT = 1.983;
+const double BALANCING_CONSTANT = 2.2;
+const double CELL_TO_KM = 0.12165;
+const double DEM = 0.125;
+
 enum CellType
 {
     FOREST = 0,
