@@ -19,5 +19,8 @@ $(TARGET): $(OBJ)
 %.o: %.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
+run: $(TARGET)
+	./$(TARGET) -t 6 > lettermap.txt
+
 clean:
 	rm -f $(OBJ) $(TARGET)

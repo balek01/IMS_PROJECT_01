@@ -32,8 +32,8 @@ def visualize_letters(filename):
                 draw.point((j, i), fill=color)
 
         # Save or display the image
-        image.save('output.png')
+        image.save('deforest.png')
         image.show()
 
 if __name__ == "__main__":
-    visualize_letters("output.txt")
+    visualize_letters("lettermap.txt")
