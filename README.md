@@ -11,10 +11,10 @@ This map is used in `map.h`.
 Usage of CA
 
 ```
-ims-ca >> output.txt
+ims-ca -t 12 >> output.txt
 ```
 
-This letter generated map of deforestation prediction can be visualised using `visualise.py`
+This letter generated map of deforestation prediction can be visualised using `visualise.py`.
 
 # Authors
 
